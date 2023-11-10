@@ -18,17 +18,22 @@
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
+        // Case-insensitive substring matching
+        function isSubstring(substring, string) {
+            return string.toLowerCase().includes(substring.toLowerCase());
+        }
+
         // Fetch data from JSON file
         function fetchData() {
             // Get the parameter value from the URL
-            var platformName = getParameterByName('name');
+            var inputName = getParameterByName('name');
 
             // Fetch the JSON data
             fetch('data.json')
                 .then(response => response.json())
                 .then(data => {
-                    // Find the entry with the specified platform name
-                    var platform = data.find(entry => entry.platform_name === platformName);
+                    // Find the entry with a name that is a case-insensitive substring of the user input
+                    var platform = data.find(entry => isSubstring(inputName, entry.platform_name));
 
                     // Display the data on the page
                     if (platform) {
